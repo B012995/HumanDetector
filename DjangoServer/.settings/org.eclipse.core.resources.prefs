@@ -1,0 +1,5 @@
+eclipse.preferences.version=1
+encoding//DjangoServer/api/migrations/0001_initial.py=utf-8
+encoding//DjangoServer/api/serializer.py=utf-8
+encoding//DjangoServer/api/thread.py=utf-8
+encoding//DjangoServer/api/views.py=utf-8
