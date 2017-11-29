@@ -10,9 +10,10 @@ if __name__ == "__main__":
 #     app = qtaddtag.QApplication(sys.argv)
 #     qtwin = qtaddtag.QtAddTag()
 #     sys.exit(app.exec_())
-    source_dir = "C:/Users/CSYSBP01/Desktop/FrameSave/"
-    save_dir = "C:/Users/CSYSBP01/Desktop/DataSet/"
-
+#     source_dir = "C:/Users/CSYSBP01/Desktop/FrameSave/"
+#     save_dir = "C:/Users/CSYSBP01/Desktop/DataSet/"
+    source_dir = "/Users/nttcom/Desktop/FrameSave/"
+    save_dir = "/Users/nttcom/Desktop/DataSet/"
 
     file_list = sorted(glob.glob(source_dir + "*"))
 
