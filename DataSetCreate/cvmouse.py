@@ -61,7 +61,7 @@ class CVMousePaint(qtaddtag.QtAddTag):
     def saveButtonClicked(self):
 
         # トリミング範囲が指定されていないか小さすぎるときに保存をさせずにメッセージを出す。
-        if self.cut_side <= 40:
+        if self.cut_side <= 50:
             self.err_lbl.setText("トリミング範囲が指定されていないか小さすぎます。")
             self.err_lbl.adjustSize()
 
@@ -72,9 +72,9 @@ class CVMousePaint(qtaddtag.QtAddTag):
             for cb in self.cblist:
                 if cb.checkState() == qtaddtag.Qt.Checked:
                     cut_image = self.original_image[self.cut_point[1]:self.cut_point[1]+self.cut_side, self.cut_point[0]:self.cut_point[0]+self.cut_side]
-                    resize_image = cv2.resize(cut_image,(50,50))
+                    resize_image = cv2.resize(cut_image,(64,64))
                     time = "{0:%Y%m%d%H%M%S%f}".format(datetime.datetime.now())
-                    cv2.imwrite(self.save_dir + cb.text() + "_" + time + ".jpg", resize_image)
+                    cv2.imwrite(self.save_dir + cb.text() + "-" + time + ".jpg", resize_image)
                     cb.setCheckState(qtaddtag.Qt.Unchecked)
                     tag_cnt += 1
 
