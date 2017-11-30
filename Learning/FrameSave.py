@@ -1,12 +1,3 @@
-# -*- coding: utf-8 -*-
-
-'''
-video2jpg.py.
-
-Usage:
-  video2jpg.py [<video source>] [<fps>] [<resize_rate>]
-'''
-
 import cv2
 
 fps = 1
@@ -26,7 +17,7 @@ while(True):
     cv2.imshow('frame', frame)
     c = cv2.waitKey(int(1000/fps)) & 0xFF
 
-    write_file_name = 'C:\\Users\\CSYSBP01\\Desktop\\FrameSave\\' + count_padded + ".jpg"
+    write_file_name = '/Users/nttcom/Desktop/FrameSave/' + count_padded + ".jpg"
     cv2.imwrite(write_file_name, frame)
 
     if c==27: # ESC
