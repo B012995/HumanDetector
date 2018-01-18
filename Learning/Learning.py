@@ -8,26 +8,24 @@ Created on 2017/10/18
 
 import numpy as np
 import cv2
+from PIL import ImageGrab
+from matplotlib import pyplot
 
-detect_state = np.zeros(120, dtype = np.int)
-detect_state_point = 0
+ImageGrab.grab().save("C:\\Users\\CSYSBP01\\Desktop\\desk.png")
 
-def detectedo(detect_cnt):
-    global detect_state_point
-    global detect_state
-    detect_state[detect_state_point] = detect_cnt
+ImageGrab.grab(bbox=(100,100,450,450)).save("C:\\Users\\CSYSBP01\\Desktop\\cut.png")
 
-    if detect_state_point == 119:
-        detect_state_point = 0
-    else:
-        detect_state_point = detect_state_point + 1
-    b = detect_state.sum()
-    if 60 <= b:
-        return True
-    else:
-        return False
-    return None
+desk=cv2.imread("C:\\Users\\CSYSBP01\\Desktop\\desk.png",0)
+cut=cv2.imread("C:\\Users\\CSYSBP01\\Desktop\\cut.png",0)
 
-for a in range(100):
-    de = detectedo(0)
-    print(de)
+w,h = cut.shape[::-1]
+
+result = cv2.matchTemplate(desk,cut,cv2.TM_CCOEFF)
+min_val,max_val,min_loc,max_loc=cv2.minMaxLoc(result)
+
+top_left=max_loc
+bottom_right=(top_left[0]+w,top_left[1]+h)
+cv2.rectangle(desk,top_left,bottom_right,0,2)
+
+pyplot.imshow(desk)
+pyplot.show()
