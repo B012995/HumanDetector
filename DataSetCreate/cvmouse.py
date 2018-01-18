@@ -6,6 +6,7 @@ import numpy as np
 import qtaddtag
 import glob
 import datetime
+import shutil
 
 class CVMouseEvent:
     def __init__(self, press_func=None, drag_func=None, release_func=None):
@@ -47,10 +48,12 @@ class CVMouseEvent:
 
 
 class CVMousePaint(qtaddtag.QtAddTag):
-    def __init__(self, filename, save_dir, win_pos):
+    def __init__(self, filename, save_dir, save_back_dir, win_pos):
 
         self.original_image = cv2.imread(filename, 1)
+        self.filename = filename
         self.save_dir = save_dir
+        self.save_back_dir = save_back_dir
         self.cut_point = (0,0)
         self.cut_side = 0
         self.next_flag = False
@@ -61,7 +64,7 @@ class CVMousePaint(qtaddtag.QtAddTag):
     def saveButtonClicked(self):
 
         # トリミング範囲が指定されていないか小さすぎるときに保存をさせずにメッセージを出す。
-        if self.cut_side <= 50:
+        if self.cut_side <= 32:
             self.err_lbl.setText("トリミング範囲が指定されていないか小さすぎます。")
             self.err_lbl.adjustSize()
 
@@ -69,14 +72,22 @@ class CVMousePaint(qtaddtag.QtAddTag):
         else:
             self.err_lbl.setText("")
             tag_cnt = 0
+            add_tagname = ""
             for cb in self.cblist:
                 if cb.checkState() == qtaddtag.Qt.Checked:
-                    cut_image = self.original_image[self.cut_point[1]:self.cut_point[1]+self.cut_side, self.cut_point[0]:self.cut_point[0]+self.cut_side]
-                    resize_image = cv2.resize(cut_image,(64,64))
-                    time = "{0:%Y%m%d%H%M%S%f}".format(datetime.datetime.now())
-                    cv2.imwrite(self.save_dir + cb.text() + "-" + time + ".jpg", resize_image)
-                    cb.setCheckState(qtaddtag.Qt.Unchecked)
+                    if tag_cnt == 0:
+                        add_tagname = cb.text()
+                    else:
+                        add_tagname = add_tagname + "_" + cb.text()
                     tag_cnt += 1
+                    cb.setCheckState(qtaddtag.Qt.Unchecked)
+
+            cut_image = self.original_image[self.cut_point[1]:self.cut_point[1]+self.cut_side, self.cut_point[0]:self.cut_point[0]+self.cut_side]
+            resize_image = cv2.resize(cut_image,(32,32))
+            time = "{0:%Y%m%d%H%M%S%f}".format(datetime.datetime.now())
+            cv2.imwrite(self.save_dir + add_tagname + "-" + time + ".jpg", resize_image)
+
+
 
             # タグが一つも選択されていないときにメッセージを出す。
             if tag_cnt == 0:
@@ -86,6 +97,8 @@ class CVMousePaint(qtaddtag.QtAddTag):
     def nextButtonClicked(self):
         # simplePaintの描画更新ループを停止するフラグを立てる。
         self.next_flag = True
+        # 処理済み画像をバックアップフォルダに移動させる
+        shutil.move(self.filename, self.save_back_dir)
 
     # 描画リセット用の元画像を生成
     def oriImage(self):

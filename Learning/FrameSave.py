@@ -8,27 +8,36 @@ Usage:
 '''
 
 import cv2
+import datetime
 
-fps = 1
-video_input = cv2.VideoCapture('http://admin:3476C559C42E@192.168.11.2:10226/snapshot.cgi?.mjpeg')
+video_input = cv2.VideoCapture('http://admin:3476C559C42E@192.168.11.4:10226/snapshot.cgi?.mjpeg')
 
 if (video_input.isOpened() == False):
     print("ビデオカメラが見つかりません")
     exit()
 
-count = 0
+fps = int(video_input.get(cv2.CAP_PROP_FPS))
+frame_count = 0
+save_count = 0
+wait = 60
+
 while(True):
-    count += 1
-    count_padded = '%05d' % count
+    frame_count += 1
+
 
     ret, frame = video_input.read()
 
-    cv2.imshow('frame', frame)
-    c = cv2.waitKey(int(1000/fps)) & 0xFF
+    if frame_count % (fps * (wait/2)) == 0:
+        save_count += 1
+        cv2.imshow('frame', frame)
 
-    write_file_name = 'C:\\Users\\CSYSBP01\\Desktop\\FrameSave\\' + count_padded + ".jpg"
-    cv2.imwrite(write_file_name, frame)
+        count_padded = '%05d' % save_count
+        time = "{0:%Y%m%d%H%M%S%f}".format(datetime.datetime.now())
+        write_file_name = 'C:\\Users\\CSYSBP01\\Desktop\\FrameSave\\' + time + "_" + count_padded + ".jpg"
 
+        cv2.imwrite(write_file_name, frame)
+
+    c = cv2.waitKey(1) & 0xFF
     if c==27: # ESC
         break
 

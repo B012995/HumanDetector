@@ -10,17 +10,16 @@ class QtAddTag(QWidget):
 
         self.win_pos = win_pos
         self.tag_name = [
-            "front_man",
-            "front_man_glasses",
-            "front_woman",
-            "front_woman_glasses",
-            "side_man",
-            "side_man_glasses",
-            "side_woman",
-            "side_woman_glasses",
-            "back_man",
-            "back_woman",
-            "back_woman_long",
+            "front",
+            "fside",
+            "side",
+            "back",
+            "man",
+            "woman",
+            "glasses",
+            "mask",
+            "long",
+            "down",
             ]
         self.cblist = [0 for i in range(len(self.tag_name))]
         self.err_lbl = None
@@ -49,7 +48,7 @@ class QtAddTag(QWidget):
         self.err_lbl = QLabel(self)
         self.err_lbl.move(20, 10+300)
 
-        self.setGeometry(self.win_pos[0], self.win_pos[1], 230*(1+len(self.tag_name)//10), 60+30*len(self.tag_name))
+        self.setGeometry(self.win_pos[0], self.win_pos[1], 230*(1+len(self.tag_name)//11), 100+30*len(self.tag_name))
 
         self.setWindowTitle('QCheckBox')
         self.show()
