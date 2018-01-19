@@ -3,6 +3,7 @@ import copy
 from PyQt5.QtWidgets import QWidget, QCheckBox, QPushButton, QApplication, QLabel
 from PyQt5.QtCore import Qt
 
+
 class QtAddTag(QWidget):
 
     def __init__(self, win_pos):

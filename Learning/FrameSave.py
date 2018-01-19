@@ -1,5 +1,6 @@
 import cv2
 
+
 fps = 1
 video_input = cv2.VideoCapture('http://admin:3476C559C42E@192.168.11.2:10226/snapshot.cgi?.mjpeg')
 

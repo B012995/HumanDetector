@@ -7,6 +7,7 @@ import qtaddtag
 import glob
 import datetime
 
+
 class CVMouseEvent:
     def __init__(self, press_func=None, drag_func=None, release_func=None):
         self._press_func = press_func

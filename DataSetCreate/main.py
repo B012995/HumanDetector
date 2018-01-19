@@ -6,6 +6,7 @@ import glob
 import cvmouse
 import qtaddtag
 
+
 if __name__ == "__main__":
 #     app = qtaddtag.QApplication(sys.argv)
 #     qtwin = qtaddtag.QtAddTag()
