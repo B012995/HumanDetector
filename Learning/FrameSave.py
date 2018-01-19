@@ -1,12 +1,3 @@
-# -*- coding: utf-8 -*-
-
-'''
-video2jpg.py.
-
-Usage:
-  video2jpg.py [<video source>] [<fps>] [<resize_rate>]
-'''
-
 import cv2
 import datetime
 
@@ -31,9 +22,14 @@ while(True):
         save_count += 1
         cv2.imshow('frame', frame)
 
+<<<<<<< HEAD
         count_padded = '%05d' % save_count
         time = "{0:%Y%m%d%H%M%S%f}".format(datetime.datetime.now())
         write_file_name = 'C:\\Users\\CSYSBP01\\Desktop\\FrameSave\\' + time + "_" + count_padded + ".jpg"
+=======
+    write_file_name = '/Users/nttcom/Desktop/FrameSave/' + count_padded + ".jpg"
+    cv2.imwrite(write_file_name, frame)
+>>>>>>> refs/remotes/origin/master
 
         cv2.imwrite(write_file_name, frame)
 
