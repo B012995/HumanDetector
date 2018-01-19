@@ -10,18 +10,22 @@ train_dir = "/Users/nttcom/Desktop/DataSet/TrainDataSet"
 test_dir = "/Users/nttcom/Desktop/DataSet/TestDataSet"
 # 識別するタグ一覧
 tag_name = [
-        "front_man",
-        "front_man_glasses",
-        "front_woman",
-        "front_woman_glasses",
-        "side_man",
-        "side_man_glasses",
-        "side_woman",
-        "side_woman_glasses",
-        "back_man",
-        "back_woman",
-        "back_woman_long",
-        ]
+    "front_man",
+    "front_man_glasses",
+    "front_man_mask",
+    "front_woman",
+    "front_woman_glasses",
+    "front_woman_mask",
+    "side_man",
+    "side_man_glasses",
+    "side_man_mask",
+    "side_woman",
+    "side_woman_glasses",
+    "side_woman_mask",
+    "back_man",
+    "back_woman",
+    "back_woman_long",
+    ]
 # 画像のサイズ
 img_size = 32
 # 画像のpixel数
@@ -64,7 +68,7 @@ def inference(images_placeholder, keep_prob):
         return tf.nn.max_pool(x, ksize=[1, 2, 2, 1],
                             strides=[1, 2, 2, 1], padding='SAME')
 
-    # ベクトル形式で入力されてきた画像データを28px*28pxの画像に戻す(多分)。
+    # ベクトル形式で入力されてきた画像データを元の高さ*幅*3の画像に戻す(多分)。
     # 今回はカラー画像なので3(モノクロだと1)
     x_image = tf.reshape(images_placeholder, [-1, img_size, img_size, 3])
 
@@ -106,10 +110,10 @@ def inference(images_placeholder, keep_prob):
 
     # 全結合層1の作成
     with tf.name_scope('fc1') as scope:
-        W_fc1 = weight_variable([7*7*64, 1024])
+        W_fc1 = weight_variable([8*8*64, 1024])
         b_fc1 = bias_variable([1024])
         # 画像の解析を結果をベクトルへ変換
-        h_pool2_flat = tf.reshape(h_pool2, [-1, 7*7*64])
+        h_pool2_flat = tf.reshape(h_pool2, [-1, 8*8*64])
         # 第一、第二と同じく、検出した特徴を活性化させている
         h_fc1 = tf.nn.relu(tf.matmul(h_pool2_flat, W_fc1) + b_fc1)
         # dropoutの設定
@@ -129,6 +133,9 @@ def inference(images_placeholder, keep_prob):
 
     # 各ラベルの確率(のようなもの?)を返す。算出された各ラベルの確率を全て足すと1になる
     return y_conv
+
+
+
 # 予測結果と正解にどれくらい「誤差」があったかを算出する
 # logitsは計算結果:  float - [batch_size, NUM_CLASSES]
 # labelsは正解ラベル: int32 - [batch_size, NUM_CLASSES]
@@ -257,12 +264,12 @@ if __name__ == '__main__':
         # train_dirでTensorBoardログを出力するpathを指定
         summary_writer = tf.summary.FileWriter(FLAGS.tensorflow_dir, sess.graph_def)
 
-        # 実際にmax_stepの回数だけ訓練の実行していく
+    # 実際にmax_stepの回数だけ訓練の実行していく
     for step in range(FLAGS.max_steps):
         for i in range(len(train_image)/FLAGS.batch_size):
             # batch_size分の画像に対して訓練の実行
             batch = FLAGS.batch_size*i
-        # feed_dictでplaceholderに入れるデータを指定する
+            # feed_dictでplaceholderに入れるデータを指定する
             sess.run(train_op, feed_dict={
                 images_placeholder: train_image[batch:batch+FLAGS.batch_size],
                 labels_placeholder: train_label[batch:batch+FLAGS.batch_size],
